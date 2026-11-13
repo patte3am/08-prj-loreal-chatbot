@@ -14,20 +14,22 @@ Cloudflare Worker.
 The frontend sends a `POST` with a `messages` array to:
 `https://08-prj-loreal-chatbot.aliviapatt03.workers.dev/`.
 
-The endpoint was reachable when checked, but returned **405 Method Not
-Allowed** to both `OPTIONS` and chat `POST` requests. The deployed Worker must
-be updated before AI chat can work:
+The repository includes `wrangler.jsonc`, which identifies
+`RESOURCE_cloudflare-worker.js` as the Worker entry point and configures the
+allowed browser origin. The existing Cloudflare Workers Build is connected to
+the `main` branch, so pushing this configuration deploys the request handler
+instead of serving the repository as static assets.
 
-1. In Cloudflare **Workers & Pages**, open the Worker for the URL above and
-   replace its deployed code with `RESOURCE_cloudflare-worker.js`. Deploy it
-   as the request handler, not a static HTML site.
-2. In Worker **Settings → Variables and Secrets**, add the `ALLOWED_ORIGIN`
-   text variable with value `https://patte3am.github.io`. Use only the origin:
-   no repository path or trailing slash.
-3. Ensure `OPENAI_API_KEY` is configured as a Cloudflare **secret**. Never
-   put an API key in this repository, frontend code, or a message.
-4. Deploy the Worker. Verify that a browser `OPTIONS` preflight succeeds and
-   that a `POST` returns JSON with `choices[0].message.content`.
+After the Worker code is deployed, add `OPENAI_API_KEY` under Cloudflare
+**Workers & Pages → the Worker → Settings → Variables and Secrets** as a
+secret. The key must not be added to this repository, frontend code, or a
+message. `ALLOWED_ORIGIN` is configured in `wrangler.jsonc` as
+`https://patte3am.github.io` (origin only, with no repository path or trailing
+slash).
+
+Verify that an `OPTIONS` preflight succeeds and that an authorized `POST`
+returns JSON with `choices[0].message.content`. A real AI response also
+requires the Cloudflare secret to be configured.
 
 The Worker returns the OpenAI chat-completions response shape and uses the
 `gpt-4.1` model. Conversation context is stored in browser memory and reset by
@@ -36,9 +38,7 @@ The Worker returns the OpenAI chat-completions response shape and uses the
 ## GitHub Pages
 
 The repository is `patte3am/08-prj-loreal-chatbot`, with default branch
-`main`. When checked, GitHub Pages was not enabled. To publish, open repository
-**Settings → Pages**, choose **Deploy from a branch**, select `main` and the
-`/(root)` folder, then save. The expected site URL is
+`main`. The published site is
 `https://patte3am.github.io/08-prj-loreal-chatbot/`; the Worker CORS origin is
 `https://patte3am.github.io` because browser origins do not include paths.
 

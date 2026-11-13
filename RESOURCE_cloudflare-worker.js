@@ -64,20 +64,31 @@ export default {
       return jsonResponse({ error: "The conversation contains an invalid message." }, 400, corsHeaders);
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${env.OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4.1",
-        messages,
-        max_completion_tokens: 500,
-      }),
-    });
+    let response;
+    try {
+      response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4.1",
+          messages,
+          max_completion_tokens: 500,
+        }),
+      });
+    } catch {
+      return jsonResponse({ error: "The AI service could not be reached. Please try again." }, 502, corsHeaders);
+    }
 
-    const data = await response.json();
+    let data;
+    try {
+      data = await response.json();
+    } catch {
+      return jsonResponse({ error: "The AI service returned an invalid response." }, 502, corsHeaders);
+    }
+
     if (!response.ok) {
       const status = response.status >= 500 ? 502 : response.status;
       return jsonResponse(

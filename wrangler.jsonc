@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json.schemastore.org/wrangler",
+  "name": "08-prj-loreal-chatbot",
+  "main": "RESOURCE_cloudflare-worker.js",
+  "compatibility_date": "2026-11-12",
+  "workers_dev": true,
+  "keep_vars": true,
+  "vars": {
+    "ALLOWED_ORIGIN": "https://patte3am.github.io"
+  }
+}
