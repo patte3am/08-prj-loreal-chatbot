@@ -1,2 +1,5 @@
-# Secrets file containing API keys
+# Local-only secrets and Cloudflare Worker development credentials
+.env
+.env.*
+.dev.vars
 secrets.js

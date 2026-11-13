@@ -1,64 +1,147 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Chat Assistant</title>
-    <link
-      href="https://fonts.googleapis.com/icon?family=Material+Icons"
-      rel="stylesheet"
+    <meta
+      name="description"
+      content="Meet the L'Oréal Smart Beauty Advisor for thoughtful skincare, makeup, haircare, and fragrance guidance."
     />
+    <meta name="theme-color" content="#f7f6f3" />
+    <title>Smart Beauty Advisor | L'Oréal</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
   </head>
-
   <body>
-    <div class="page-wrapper">
-      <!------- Header / Branding ------->
+    <div class="page-shell">
       <header class="site-header">
-        <h1 class="site-title">Smart Product Advisor</h1>
+        <div class="brand">
+          <img
+            class="brand-logo"
+            src="img/loreal-logo.png"
+            alt="L'Oréal"
+            width="170"
+            height="37"
+          />
+        </div>
+        <p class="header-note">BEAUTY, MADE PERSONAL</p>
       </header>
 
-      <!------- Chat Area ------->
       <main>
-        <section class="chatbox">
-          <div id="chatWindow" class="chat-window">
-            <!-- messages will be appended here via JS -->
+        <section class="intro" aria-labelledby="page-title">
+          <p class="eyebrow">YOUR PERSONAL BEAUTY EDIT</p>
+          <h1 id="page-title">A little more <em>you.</em></h1>
+          <p class="intro-copy">
+            Thoughtful advice for your skin, your style, and every day in
+            between.
+          </p>
+          <div class="category-list" aria-label="Choose a beauty category">
+            <button class="category-button is-selected" type="button" data-category="skincare" aria-pressed="true">
+              Skincare
+            </button>
+            <button class="category-button" type="button" data-category="makeup" aria-pressed="false">
+              Makeup
+            </button>
+            <button class="category-button" type="button" data-category="haircare" aria-pressed="false">
+              Haircare
+            </button>
+            <button class="category-button" type="button" data-category="fragrance" aria-pressed="false">
+              Fragrance
+            </button>
+          </div>
+        </section>
+
+        <section class="advisor-card" aria-labelledby="advisor-title">
+          <div class="advisor-topline">
+            <div class="advisor-heading">
+              <span class="advisor-mark" aria-hidden="true">L</span>
+              <div>
+                <p class="eyebrow">LOREAL BEAUTY ASSISTANT</p>
+                <h2 id="advisor-title">Your beauty advisor</h2>
+              </div>
+            </div>
+            <button class="clear-button" id="clearChat" type="button">
+              <svg aria-hidden="true" viewBox="0 0 20 20">
+                <path d="M3 5h14M8 5V3h4v2m3 0-.8 11H5.8L5 5m3 3v5m4-5v5" />
+              </svg>
+              <span>New chat</span>
+            </button>
           </div>
 
-          <form id="chatForm" class="chat-form">
-            <label for="userInput" class="visually-hidden">Message</label>
+          <div class="category-context" id="categoryContext">
+            <span class="context-label">EXPLORE SKINCARE</span>
+            <div class="suggestion-list" id="suggestionList" aria-label="Suggested questions">
+              <button class="suggestion-button" type="button">Build me a simple morning skincare routine</button>
+              <button class="suggestion-button" type="button">How can I add hydration to my routine?</button>
+              <button class="suggestion-button" type="button">Help me understand a gentle skin-care routine</button>
+            </div>
+          </div>
+
+          <div class="latest-question" id="latestQuestion" hidden>
+            <span class="context-label">YOUR LATEST QUESTION</span>
+            <p id="latestQuestionText"></p>
+          </div>
+
+          <div
+            class="chat-window"
+            id="chatWindow"
+            role="log"
+            aria-label="Conversation with your beauty advisor"
+            aria-live="polite"
+            aria-relevant="additions text"
+          >
+            <article class="message message-assistant">
+              <span class="message-avatar" aria-hidden="true">L</span>
+              <div class="message-content">
+                <p class="message-label">YOUR BEAUTY ADVISOR</p>
+                <p class="message-text">
+                  Hello, beautiful. I can help you explore skincare, makeup,
+                  haircare, and fragrance, or put together a routine that feels
+                  like you. What would you like to discover?
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <p class="connection-note" id="connectionNote" role="status">
+            <span class="status-dot" aria-hidden="true"></span>
+            Your conversation stays in this browser session.
+          </p>
+
+          <form class="chat-form" id="chatForm">
+            <label class="visually-hidden" for="userInput">Ask your beauty advisor a question</label>
             <input
               id="userInput"
               name="userInput"
               type="text"
-              placeholder="Ask me about products or routines…"
+              maxlength="1200"
+              placeholder="Ask about your routine, products, or beauty goals..."
               autocomplete="off"
               required
             />
-            <button type="submit" id="sendBtn">
-              <span class="material-icons">send</span>
-              <span class="visually-hidden">Send</span>
+            <button class="send-button" id="sendBtn" type="submit" aria-label="Send message">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M4 12 20 4l-5 16-3-7-8-1Zm8 1 8-9" />
+              </svg>
             </button>
           </form>
+          <p class="disclaimer">
+            Advice is for inspiration and isn't a substitute for professional
+            medical guidance.
+          </p>
         </section>
       </main>
 
-      <!------- Footer Links ------->
       <footer class="site-footer">
-        <p>&copy; 2025 Company Name. All rights reserved.</p>
-        <nav>
-          <!-- These URLs are placeholders -->
-          <a href="#">Privacy Policy</a>
-          <a href="#">Terms of Use</a>
-          <a href="#">Contact</a>
-        </nav>
+        <p>BEAUTY FOR ALL. SCIENCE FOR YOU.</p>
+        <span>© L'ORÉAL · SMART BEAUTY ADVISOR</span>
       </footer>
     </div>
-
-    <script src="script.js"></script>
   </body>
 </html>
